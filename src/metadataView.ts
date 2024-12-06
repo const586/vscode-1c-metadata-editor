@@ -971,6 +971,7 @@ function FillCommonItems(idPrefix: string, versionMetadata: VersionMetadata, obj
 		GetTreeItem('', 'Формы', { icon: 'form', context: 'canCreate', children: objectData.form[versionMetadata.$_name] }),
 		GetTreeItem('', 'Команды', { icon: 'command', context: 'canCreate', children: commands.length === 0 ? undefined : commands }),
 		GetTreeItem('', 'Макеты', { icon: 'template', context: 'canCreate', children: objectData.template[versionMetadata.$_name] }),
+
     
 	];
 }
