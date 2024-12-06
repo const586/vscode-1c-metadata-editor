@@ -812,10 +812,10 @@ function FillWebServiceItemsByMetadata(idPrefix: string, versionMetadata: Versio
 		.Metadata ?? [])
 		.filter(m => m.$_name.startsWith(versionMetadata.$_name + '.Operation.') && m.$_name.split('.').length === 4)
 		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, {
-      icon: 'operation', children: (versionMetadata
+      icon: 'operation', context: 'canCreate', children: (versionMetadata
         .Metadata ?? [])
         .filter(f => f.$_name.startsWith(versionMetadata.$_name + '.Operation.' + m.$_name.split('.').pop() + '.Parameter.') && f.$_name.split('.').length === 6)
-        .map(f => GetTreeItem(idPrefix + f.$_id, f.$_name, { icon: 'parameter' })) }));
+        .map(f => GetTreeItem(idPrefix + f.$_id, f.$_name, { icon: 'parameter', context: 'canCreate' })) }));
 }
 
 function FillHttpServiceItemsByMetadata(idPrefix: string, versionMetadata: VersionMetadata, objectData: MetadataDictionaries) {
@@ -823,30 +823,30 @@ function FillHttpServiceItemsByMetadata(idPrefix: string, versionMetadata: Versi
 		.Metadata ?? [])
 		.filter(m => m.$_name.startsWith(versionMetadata.$_name + '.URLTemplate.') && m.$_name.split('.').length === 4)
 		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, {
-      icon: 'urlTemplate', children: (versionMetadata
+      icon: 'urlTemplate', context: 'canCreate', children: (versionMetadata
         .Metadata ?? [])
         .filter(f => f.$_name.startsWith(versionMetadata.$_name + '.URLTemplate.' + m.$_name.split('.').pop() + '.Method.') && f.$_name.split('.').length === 6)
-        .map(f => GetTreeItem(idPrefix + f.$_id, f.$_name, { icon: 'parameter' })) }));
+        .map(f => GetTreeItem(idPrefix + f.$_id, f.$_name, { icon: 'parameter', context: 'canCreate' })) }));
 }
 
 function FillObjectItemsByMetadata(idPrefix: string, versionMetadata: VersionMetadata, objectData: MetadataDictionaries): TreeItem[] {
 	const attributes = (versionMetadata
 		.Metadata ?? [])
 		.filter(m => m.$_name.startsWith(versionMetadata.$_name + '.Attribute.'))
-		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'attribute' }));
+		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'attribute', context: 'canCreate' }));
 
 	const tabularSection = (versionMetadata.Metadata ?? [])
 		.filter(m => m.$_name.startsWith(versionMetadata.$_name + '.TabularSection.') && !m.$_name.includes('.Attribute.'))
 		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, {
-			icon: 'tabularSection',
+			icon: 'tabularSection', context: 'canCreate',
 			// TODO: undefined for children if length eq zero
 			children: (versionMetadata.Metadata ?? [])
 				.filter(f => f.$_name.startsWith(versionMetadata.$_name + '.TabularSection.' + m.$_name.split('.').pop()) && f.$_name.includes('.Attribute.'))
-				.map(f => GetTreeItem(idPrefix + f.$_id, f.$_name, { icon: 'attribute' })) }));
+				.map(f => GetTreeItem(idPrefix + f.$_id, f.$_name, { icon: 'attribute', context: 'canCreate' })) }));
 
 	const items = [
-		GetTreeItem('', 'Реквизиты', { icon: 'attribute', children: attributes.length === 0 ? undefined : attributes }),
-		GetTreeItem('', 'Табличные части', { icon: 'tabularSection', children: tabularSection }),
+		GetTreeItem('', 'Реквизиты', { icon: 'attribute', children: attributes.length === 0 ? undefined : attributes, context: 'canCreate' }),
+		GetTreeItem('', 'Табличные части', { icon: 'tabularSection', children: tabularSection, context: 'canCreate' }),
 	];
 
 	return [ ...items, ...FillCommonItems(idPrefix , versionMetadata, objectData) ];
@@ -856,10 +856,10 @@ function FillDocumentJournalItemsByMetadata(idPrefix: string, versionMetadata: V
 	const columns = (versionMetadata
 		.Metadata ?? [])
 		.filter(m => m.$_name.startsWith(versionMetadata.$_name + '.Column.'))
-		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'column' }));
+		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'column', context: 'canCreate' }));
 
 	const items = [
-		GetTreeItem('', 'Графы', { icon: 'column', children: columns.length === 0 ? undefined : columns }),
+		GetTreeItem('', 'Графы', { icon: 'column', context: 'canCreate', children: columns.length === 0 ? undefined : columns }),
 	];
 
 	return [ ...items, ...FillCommonItems(idPrefix, versionMetadata, objectData) ];
@@ -869,10 +869,10 @@ function FillEnumItemsByMetadata(idPrefix: string, versionMetadata: VersionMetad
 	const values = (versionMetadata
 		.Metadata ?? [])
 		.filter(m => m.$_name.startsWith('Enum.'))
-		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'attribute' }));
+		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'attribute', context: 'canCreate' }));
 	
 	const items = [
-		GetTreeItem('', 'Значения', { icon: 'attribute', children: values.length === 0 ? undefined : values }),
+		GetTreeItem('', 'Значения', { icon: 'attribute', context: 'canCreate', children: values.length === 0 ? undefined : values }),
 	];
 
 	return [ ...items, ...FillCommonItems(idPrefix, versionMetadata, objectData) ];
@@ -882,17 +882,17 @@ function FillChartOfAccountsItemsByMetadata(idPrefix: string, versionMetadata: V
 	const accountingFlags = (versionMetadata
 		.Metadata ?? [])
 		.filter(m => m.$_name.startsWith(versionMetadata.$_name + '.AccountingFlag.'))
-		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'accountingFlag' }));
+		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'accountingFlag', context: 'canCreate' }));
 
 	const extDimensionAccountingFlag = (versionMetadata
 		.Metadata ?? [])
 		.filter(m => m.$_name.startsWith(versionMetadata.$_name + '.ExtDimensionAccountingFlag.'))
-		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'extDimensionAccountingFlag' }));
+		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'extDimensionAccountingFlag', context: 'canCreate' }));
 
   const items = [
-		GetTreeItem('', 'Признаки учета', { icon: 'accountingFlag', children: accountingFlags.length === 0 ? undefined : accountingFlags }),
+		GetTreeItem('', 'Признаки учета', { icon: 'accountingFlag', context: 'canCreate', children: accountingFlags.length === 0 ? undefined : accountingFlags }),
 		GetTreeItem('', 'Признаки учета субконто', {
-      icon: 'extDimensionAccountingFlag', children: extDimensionAccountingFlag.length === 0 ? undefined : extDimensionAccountingFlag }),
+      icon: 'extDimensionAccountingFlag', context: 'canCreate', children: extDimensionAccountingFlag.length === 0 ? undefined : extDimensionAccountingFlag }),
 	];
 
 	return [ ...items, ...FillObjectItemsByMetadata(idPrefix, versionMetadata, objectData) ]
@@ -903,22 +903,22 @@ function FillRegisterItemsByMetadata(idPrefix: string, versionMetadata: VersionM
 	const dimensions = (versionMetadata
 		.Metadata ?? [])
 		.filter(m => m.$_name.startsWith(versionMetadata.$_name + '.Dimension.'))
-		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'dimension' }));
+		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'dimension', context: 'canCreate' }));
 
 	const resources = (versionMetadata
 		.Metadata ?? [])
 		.filter(m => m.$_name.startsWith(versionMetadata.$_name + '.Resource.'))
-		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'resource' }));
+		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'resource', context: 'canCreate' }));
 
 	const attributes = (versionMetadata
 		.Metadata ?? [])
 		.filter(m => m.$_name.startsWith(versionMetadata.$_name + '.Attribute.'))
-		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'attribute' }));
+		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'attribute', context: 'canCreate' }));
 
 	const items = [
-		GetTreeItem('', 'Измерения', { icon: 'dimension', children: dimensions.length === 0 ? undefined : dimensions }),
-		GetTreeItem('', 'Ресурсы', { icon: 'resource', children: resources.length === 0 ? undefined : resources }),
-		GetTreeItem('', 'Реквизиты', { icon: 'attribute', children: attributes.length === 0 ? undefined : attributes }),
+		GetTreeItem('', 'Измерения', { icon: 'dimension', context: 'canCreate', children: dimensions.length === 0 ? undefined : dimensions }),
+		GetTreeItem('', 'Ресурсы', { icon: 'resource', context: 'canCreate', children: resources.length === 0 ? undefined : resources }),
+		GetTreeItem('', 'Реквизиты', { icon: 'attribute', context: 'canCreate', children: attributes.length === 0 ? undefined : attributes }),
 	];
 
 	return [ ...items, ...FillCommonItems(idPrefix, versionMetadata, objectData) ];
@@ -936,10 +936,10 @@ function FillTaskItemsByMetadata(idPrefix: string, versionMetadata: VersionMetad
 	const attributes = (versionMetadata
 		.Metadata ?? [])
 		.filter(m => m.$_name.startsWith(versionMetadata.$_name + '.AddressingAttribute.'))
-		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'attribute' }));
+		.map(m => GetTreeItem(idPrefix + m.$_id, m.$_name, { icon: 'attribute', context: 'canCreate' }));
 
   const items = [
-		GetTreeItem('', 'Реквизиты адресации', { icon: 'attribute', children: attributes.length === 0 ? undefined : attributes }),
+		GetTreeItem('', 'Реквизиты адресации', { icon: 'attribute', context: 'canCreate', children: attributes.length === 0 ? undefined : attributes }),
 	];
 
 	return [ ...items, ...FillObjectItemsByMetadata(idPrefix, versionMetadata, objectData) ]
@@ -968,9 +968,10 @@ function FillCommonItems(idPrefix: string, versionMetadata: VersionMetadata, obj
       }));
 
 	return [
-		GetTreeItem('', 'Формы', { icon: 'form', children: objectData.form[versionMetadata.$_name] }),
-		GetTreeItem('', 'Команды', { icon: 'command', children: commands.length === 0 ? undefined : commands }),
-		GetTreeItem('', 'Макеты', { icon: 'template', children: objectData.template[versionMetadata.$_name] }),
+		GetTreeItem('', 'Формы', { icon: 'form', context: 'canCreate', children: objectData.form[versionMetadata.$_name] }),
+		GetTreeItem('', 'Команды', { icon: 'command', context: 'canCreate', children: commands.length === 0 ? undefined : commands }),
+		GetTreeItem('', 'Макеты', { icon: 'template', context: 'canCreate', children: objectData.template[versionMetadata.$_name] }),
+    
 	];
 }
 
@@ -1085,54 +1086,54 @@ export class NodeWithIdTreeDataProvider implements vscode.TreeDataProvider<TreeI
 function CreateMetadata(idPrefix: string) {
   return [
     GetTreeItem(idPrefix + '/common', 'Общие', { icon: 'common', children: [
-      GetTreeItem(idPrefix + '/subsystems', 'Подсистемы', { icon: 'subsystem', children: [] }),
-      GetTreeItem(idPrefix + '/commonModules', 'Общие модули', { icon: 'commonModule', children: [] }),
-      GetTreeItem(idPrefix + '/sessionParameters', 'Параметры сеанса', { icon: 'sessionParameter', children: [] }),
-      GetTreeItem(idPrefix + '/roles', 'Роли', { icon: 'role', children: [] }),
-      GetTreeItem(idPrefix + '/commonAttributes', 'Общие реквизиты', { icon: 'attribute', children: [] }),
-      GetTreeItem(idPrefix + '/exchangePlans', 'Планы обмена', { icon: 'exchangePlan', children: [] }),
-      GetTreeItem(idPrefix + '/filterCriteria', 'Критерии отбора', { icon: 'filterCriteria', children: [] }),
-      GetTreeItem(idPrefix + '/eventSubscriptions', 'Подписки на события', { icon: 'eventSubscription', children: [] }),
-      GetTreeItem(idPrefix + '/scheduledJobs', 'Регламентные задания', { icon: 'scheduledJob', children: [] }),
+      GetTreeItem(idPrefix + '/subsystems', 'Подсистемы', { icon: 'subsystem', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/commonModules', 'Общие модули', { icon: 'commonModule', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/sessionParameters', 'Параметры сеанса', { icon: 'sessionParameter', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/roles', 'Роли', { icon: 'role', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/commonAttributes', 'Общие реквизиты', { icon: 'attribute', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/exchangePlans', 'Планы обмена', { icon: 'exchangePlan', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/filterCriteria', 'Критерии отбора', { icon: 'filterCriteria', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/eventSubscriptions', 'Подписки на события', { icon: 'eventSubscription', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/scheduledJobs', 'Регламентные задания', { icon: 'scheduledJob', children: [], context: 'canCreate' }),
       //GetTreeItem(idPrefix + '', 'Боты', { children: [] }),
-      GetTreeItem(idPrefix + '/functionalOptions', 'Функциональные опции', { children: [] }),
-      GetTreeItem(idPrefix + '/functionalOptionsParameters', 'Параметры функциональных опций', { children: [] }),
-      GetTreeItem(idPrefix + '/definedTypes', 'Определяемые типы', { children: [] }),
-      GetTreeItem(idPrefix + '/settingsStorages', 'Хранилища настроек', { children: [] }),
-      GetTreeItem(idPrefix + '/commonCommands', 'Общие команды', { children: [] }),
-      GetTreeItem(idPrefix + '/commandGroups', 'Группы команд', { children: [] }),
-      GetTreeItem(idPrefix + '/commonForms', 'Общие формы', { icon: 'form', children: [] }),
-      GetTreeItem(idPrefix + '/commonTemplates', 'Общие макеты', { children: [] }),
-      GetTreeItem(idPrefix + '/commonPictures', 'Общие картинки', { icon: 'picture', children: [] }),
-      GetTreeItem(idPrefix + '/xdtoPackages', 'XDTO-пакеты', { children: [] }),
-      GetTreeItem(idPrefix + '/webServices', 'Web-сервисы', { icon: 'ws', children: [] }),
-      GetTreeItem(idPrefix + '/httpServices', 'HTTP-сервисы', { icon: 'http', children: [] }),
-      GetTreeItem(idPrefix + '/wsReferences', 'WS-ссылки', { icon: 'wsLink', children: [] }),
+      GetTreeItem(idPrefix + '/functionalOptions', 'Функциональные опции', { children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/functionalOptionsParameters', 'Параметры функциональных опций', { children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/definedTypes', 'Определяемые типы', { children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/settingsStorages', 'Хранилища настроек', { children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/commonCommands', 'Общие команды', { children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/commandGroups', 'Группы команд', { children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/commonForms', 'Общие формы', { icon: 'form', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/commonTemplates', 'Общие макеты', { children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/commonPictures', 'Общие картинки', { icon: 'picture', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/xdtoPackages', 'XDTO-пакеты', { children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/webServices', 'Web-сервисы', { icon: 'ws', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/httpServices', 'HTTP-сервисы', { icon: 'http', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/wsReferences', 'WS-ссылки', { icon: 'wsLink', children: [], context: 'canCreate' }),
       //GetTreeItem(idPrefix + '/', 'Сервисы интеграции', { children: [] }),
-      GetTreeItem(idPrefix + '/styleItems', 'Элементы стиля', { children: [] }),
-      GetTreeItem(idPrefix + '/styles', 'Стили', { icon: 'style', children: [] }),
-      GetTreeItem(idPrefix + '/languages', 'Языки', { children: [] }),
+      GetTreeItem(idPrefix + '/styleItems', 'Элементы стиля', { children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/styles', 'Стили', { icon: 'style', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/languages', 'Языки', { children: [], context: 'canCreate' }),
     ]}),
-    GetTreeItem(idPrefix + '/constants', 'Константы', { icon: 'constant', children: [] }),
-    GetTreeItem(idPrefix + '/catalogs', 'Справочники', { icon: 'catalog', children: [] }),
+    GetTreeItem(idPrefix + '/constants', 'Константы', { icon: 'constant', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/catalogs', 'Справочники', { icon: 'catalog', children: [], context: 'canCreate' }),
     GetTreeItem(idPrefix + '/documents', 'Документы', { icon: 'document', children: [
-      GetTreeItem(idPrefix + '/documentNumerators', 'Нумераторы', { icon: 'documentNumerator', children: [] }),
-      GetTreeItem(idPrefix + '/sequences', 'Последовательности', { icon: 'sequence', children: [] }),
-    ]}),
-    GetTreeItem(idPrefix + '/documentJournals', 'Журналы документов', { icon: 'documentJournal', children: [] }),
-    GetTreeItem(idPrefix + '/enums', 'Перечисления', { icon: 'enum', children: [] }),
-    GetTreeItem(idPrefix + '/reports', 'Отчеты', { icon: 'report', children: [] }),
-    GetTreeItem(idPrefix + '/dataProcessors', 'Обработки', { icon: 'dataProcessor', children: [] }),
-    GetTreeItem(idPrefix + '/chartsOfCharacteristicTypes', 'Планы видов характеристик', { icon: 'chartsOfCharacteristicType', children: [] }),
-    GetTreeItem(idPrefix + '/chartsOfAccounts', 'Планы счетов', { icon: 'chartsOfAccount', children: [] }),
-    GetTreeItem(idPrefix + '/chartsOfCalculationTypes', 'Планы видов расчета', { icon: 'chartsOfCalculationType', children: [] }),
-    GetTreeItem(idPrefix + '/informationRegisters', 'Регистры сведений', { icon: 'informationRegister', children: [] }),
-    GetTreeItem(idPrefix + '/accumulationRegisters', 'Регистры накопления', { icon: 'accumulationRegister', children: [] }),
-    GetTreeItem(idPrefix + '/accountingRegisters', 'Регистры бухгалтерии', { icon: 'accountingRegister', children: [] }),
-    GetTreeItem(idPrefix + '/calculationRegisters', 'Регистры расчета', { icon: 'calculationRegister', children: [] }),
-    GetTreeItem(idPrefix + '/businessProcesses', 'Бизнес-процессы', { icon: 'businessProcess', children: [] }),
-    GetTreeItem(idPrefix + '/tasks', 'Задачи', { icon: 'task', children: [] }),
-    GetTreeItem(idPrefix + '/externalDataSources', 'Внешние источники данных', { icon: 'externalDataSource', children: [] }),
+      GetTreeItem(idPrefix + '/documentNumerators', 'Нумераторы', { icon: 'documentNumerator', children: [], context: 'canCreate' }),
+      GetTreeItem(idPrefix + '/sequences', 'Последовательности', { icon: 'sequence', children: [], context: 'canCreate' }),
+    ], context: 'canCreate'}),
+    GetTreeItem(idPrefix + '/documentJournals', 'Журналы документов', { icon: 'documentJournal', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/enums', 'Перечисления', { icon: 'enum', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/reports', 'Отчеты', { icon: 'report', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/dataProcessors', 'Обработки', { icon: 'dataProcessor', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/chartsOfCharacteristicTypes', 'Планы видов характеристик', { icon: 'chartsOfCharacteristicType', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/chartsOfAccounts', 'Планы счетов', { icon: 'chartsOfAccount', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/chartsOfCalculationTypes', 'Планы видов расчета', { icon: 'chartsOfCalculationType', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/informationRegisters', 'Регистры сведений', { icon: 'informationRegister', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/accumulationRegisters', 'Регистры накопления', { icon: 'accumulationRegister', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/accountingRegisters', 'Регистры бухгалтерии', { icon: 'accountingRegister', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/calculationRegisters', 'Регистры расчета', { icon: 'calculationRegister', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/businessProcesses', 'Бизнес-процессы', { icon: 'businessProcess', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/tasks', 'Задачи', { icon: 'task', children: [], context: 'canCreate' }),
+    GetTreeItem(idPrefix + '/externalDataSources', 'Внешние источники данных', { icon: 'externalDataSource', children: [], context: 'canCreate' }),
   ];
 }
 

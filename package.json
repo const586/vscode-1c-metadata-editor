@@ -39,6 +39,10 @@
 				"title": "%1c-metadata-viewer.openManagedApplicationModule.title%"
 			},
 			{
+				"command": "metadataViewer.createObject",
+				"title": "%1c-metadata-viewer.createObject.title%"
+			},
+			{
 				"command": "metadataViewer.openSessionModule",
 				"title": "%1c-metadata-viewer.openSessionModule.title%"
 			},
@@ -204,7 +208,13 @@
 				{
 					"command": "metadataViewer.clearFilter",
 					"when": "viewItem =~ /subsystem/ && viewItem in filteredConfigArray"
+				},
+				{
+					"command": "metadataViewer.createObject",
+					"group": "bsl",
+					"when": "viewItem == canCreate"
 				}
+				
 			]
 		},
 		"configuration": [

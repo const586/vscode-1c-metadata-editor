@@ -16,5 +16,7 @@
 	"1c-metadata-viewer.openHandler.title": "Open handler",
 	"1c-metadata-viewer.openMetadataProperties.title": "Properties",
 	"1c-metadata-viewer.filterBySubsystem.title": "Filter by subsystem",
-	"1c-metadata-viewer.clearFilter.title": "Clear subsystem filter"
+	"1c-metadata-viewer.clearFilter.title": "Clear subsystem filter",
+	"1c-metadata-viewer.createObject.title": "Create object"
+	
 }

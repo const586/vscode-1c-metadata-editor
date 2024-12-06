@@ -16,6 +16,9 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		OpenFile(filePath);
 	});
+	vscode.commands.registerCommand('metadataViewer.createObject', (node: TreeItem) => {
+		vscode.window.showInformationMessage(`Command CreateObject created successfully.`);
+	});
 	vscode.commands.registerCommand('metadataViewer.openSessionModule', (node: TreeItem) => {
 		let filePath = '';
 		if (node.configType === 'xml') {
